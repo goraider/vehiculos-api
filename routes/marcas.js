@@ -4,7 +4,7 @@ const { check } = require('express-validator');
 
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
-const { crearMarca, actualizarMarca } = require('../controllers/marcas');
+const { listadoDeMarcas, crearMarca, actualizarMarca, eliminarMarca } = require('../controllers/marcas');
 
 const router = Router();
 
@@ -12,7 +12,7 @@ const router = Router();
 router.use( validarJWT );
 
 
-//router.get( '/listado-marcas', listadoDeMarcas );
+router.get( '/listado-marcas', listadoDeMarcas );
 
 router.post(
     '/crear-marca',
@@ -25,7 +25,7 @@ router.post(
 
 router.put( '/actualizar-marca/:id', actualizarMarca );
 
-//router.delete( '/eliminar-marca/:id', eliminarMarca );
+router.delete( '/eliminar-marca/:id', eliminarMarca );
 
 
 

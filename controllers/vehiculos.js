@@ -7,12 +7,17 @@ const listaVehiculos = async(request, res = response) => {
 
     //const { test } = request.body;
     const vehiculos = await Vehiculo.find()
-                                .populate('user');
+                                .populate({
+                                    path:'user',
+                                    select:'username email'
+                               })
+                                .populate('marca')
+                                .populate('color');
 
     return res.status(200).json({
 
         succesfull: true,
-        msg: 'Listado de Vehiculos',
+        msg: 'Listado de Vehículo',
         vehiculos
 
     });
@@ -27,7 +32,7 @@ const crearVehiculo = async(request, res = response) => {
 
     try {
 
-        vehiculo.user = request.uid;
+       vehiculo.user = request.uid;
 
        const vehiculoGuardado = await vehiculo.save();
 
@@ -35,11 +40,9 @@ const crearVehiculo = async(request, res = response) => {
 
             succesfull: true,
             vehiculo: vehiculoGuardado,
-            msg: 'Vehiculo Creado'
+            msg: 'Vehículo Creado'
             
         });
-
-        
     } catch (error) {
         console.log(error);
         res.status(500).json({
@@ -48,9 +51,6 @@ const crearVehiculo = async(request, res = response) => {
         });
         
     }
-
-
-
 }
 
 const actualizarVehiculo = async(request, res = response) => {
@@ -65,7 +65,7 @@ const actualizarVehiculo = async(request, res = response) => {
         if( !vehiculo ) {
             res.status(404).json({
                 succesfull: false,
-                msg: 'El Vehiculo no existe con este ID'
+                msg: 'El Vehículo no existe con este ID'
             });
         }
 
@@ -100,12 +100,12 @@ const actualizarVehiculo = async(request, res = response) => {
     }
 
     
-    res.status(200).json({
+    // res.status(200).json({
 
-        succesfull: true,
-        vehiculoId
+    //     succesfull: true,
+    //     vehiculoId
         
-    });
+    // });
 
 }
 
@@ -123,7 +123,7 @@ const eliminarVehiculo = async(request, res = response) =>{
 
             return res.status(404).json({
                 succesfull: false,
-                msg: 'El Vehiculo no existe con este ID'
+                msg: 'El Vehículo no existe con este ID'
             });
         }
 

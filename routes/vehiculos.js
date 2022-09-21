@@ -13,7 +13,7 @@ const router = Router();
 router.use( validarJWT );
 
 
-router.get( '/lista-vehiculos', listaVehiculos );
+router.get( '/listado-vehiculos', listaVehiculos );
 
 router.post(
     '/crear-vehiculo',

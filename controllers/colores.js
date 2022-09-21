@@ -1,44 +1,42 @@
 const { response } = require('express');
-const Marca  = require('../models/Marca');
+const Color  = require('../models/Color');
 
-
-
-const listadoDeMarcas = async(request, res = response) => {
+const listadoDeColores = async(request, res = response) => {
 
     const pageSize = 10;
     const currentPage = 1;
     const per_page = 20;
 
-    const marcas = await Marca.find()
+    const colores = await Color.find()
                         .skip(pageSize * (currentPage - 1))
                         .limit(pageSize);
 
-    const total = await Marca.countDocuments();
+    const total = await Color.countDocuments();
 
     return res.status(200).json({
         succesfull: true,
-        msg: 'Listado de las Marcas',
-        marcas,
+        msg: 'Listado de Colores',
+        colores,
         total,
         per_page
     });
 
 }
 
-const crearMarca = async(request, res = response) => {
+const crearColor = async(request, res = response) => {
 
     console.log( request.body );
-    const marca = new Marca( request.body );
+    const color = new Color( request.body );
 
     try {
 
-       marca.user = request.uid;
-       const marcaGuardada = await marca.save();
+       color.user = request.uid;
+       const colorGuardado = await color.save();
 
         res.status(200).json({
             succesfull: true,
-            vehiculo: marcaGuardada,
-            msg: 'Se ha Creado la Marca'
+            vehiculo: colorGuardado,
+            msg: 'Se ha Creado el Color'
         });
 
         
@@ -54,31 +52,31 @@ const crearMarca = async(request, res = response) => {
 
 }
 
-const actualizarMarca = async(request, res = response) => {
+const actualizarColor = async(request, res = response) => {
 
-    const marcaId = request.params.id;
+    const colorId = request.params.id;
 
     try {
 
-        const marca = await Marca.findById( marcaId );
+        const color = await Color.findById( colorId );
 
-        if( !marca ) {
+        if( !color ) {
             res.status(404).json({
                 succesfull: false,
-                msg: 'La Marca no existe con este ID'
+                msg: 'El Color no existe con este ID'
             });
         }else{
             
-            const nuevaMarca = {
+            const nuevoColor = {
                 ...request.body
             }
     
-            const marcaActualizada = await Marca.findByIdAndUpdate( marcaId, nuevaMarca, {new: true} );
+            const colorctualizado = await Color.findByIdAndUpdate( colorId, nuevoColor, {new: true} );
     
             res.status(200).json({
                 succesfull: true,
-                marca: marcaActualizada,
-                msg: 'La Marca se editó con Éxito'
+                marca: colorctualizado,
+                msg: 'El color se editó con Éxito'
             });
         }
 
@@ -95,27 +93,27 @@ const actualizarMarca = async(request, res = response) => {
 
 }
 
-const eliminarMarca = async(request, res = response) =>{
+const eliminarColor = async(request, res = response) =>{
 
-    const marcaId = request.params.id;
+    const colorId = request.params.id;
 
     try {
 
-        const marca = await Marca.findById( marcaId );
+        const color = await Color.findById( colorId );
 
-        if( !marca ) {
+        if( !color ) {
 
             return res.status(404).json({
                 succesfull: false,
-                msg: 'La Marca no existe con este ID'
+                msg: 'El Color no existe con este ID'
             });
         }
 
-        await Marca.findByIdAndDelete( marcaId );
+        await Color.findByIdAndDelete( colorId );
 
         res.status(200).json({
             succesfull: true,
-            msg: 'Marca Eliminada'
+            msg: 'Color Eliminado'
         });
         
     } catch (error) {
@@ -129,11 +127,9 @@ const eliminarMarca = async(request, res = response) =>{
     }
 }
 
-
-
 module.exports = {
-    listadoDeMarcas,
-    crearMarca,
-    actualizarMarca,
-    eliminarMarca
+    listadoDeColores,
+    crearColor,
+    actualizarColor,
+    eliminarColor
 };
