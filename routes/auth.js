@@ -5,10 +5,13 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 const { validarCampos } = require('../middlewares/validar-campos');
-const { createUser, revalidateToken, loginUser } = require('../controllers/auth');
+const { createUser, revalidateToken, loginUser, listaUsuarios } = require('../controllers/auth');
 const { validarJWT } = require('../middlewares/validar-jwt'); 
 const router = Router();
 //const router =  express.Router;
+
+
+router.get( '/lista-usuarios', listaUsuarios );
 
 
 router.post(

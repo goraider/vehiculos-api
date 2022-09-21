@@ -4,6 +4,28 @@ const Usuario = require('../models/Usuario');
 const { generarJWT } = require('../helpers/jwt');
 //const { validationResult } = require('express-validator');
 
+const listaUsuarios = async(request, res = response) => {
+
+    const pageSize = 10;
+    const currentPage = 1;
+    const per_page = 20;
+
+    const usuarios = await Usuario.find()
+                        .skip(pageSize * (currentPage - 1))
+                        .limit(pageSize);
+
+    const total = await Usuario.countDocuments();
+
+    return res.status(200).json({
+        succesfull: true,
+        msg: 'Lista de Usuarios',
+        usuarios,
+        total,
+        per_page
+    });
+
+}
+
 
 
 const createUser = async(request, res = response) =>{
@@ -86,6 +108,11 @@ const loginUser = async(request, res = response) =>{
         
         res.json({
             succesfull:true,
+            usuario: {
+                id: usuario.id,
+                username: usuario.username,
+                email: usuario.email,
+            },
             uid: usuario.id,
             username: usuario.username,
             token
@@ -124,8 +151,8 @@ const revalidateToken = async(request, res = response) =>{
 }
 
 module.exports = {
+    listaUsuarios,
     createUser,
     loginUser,
     revalidateToken
-
 }

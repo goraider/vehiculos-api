@@ -19,7 +19,7 @@ app.use( express.static('public') );
 app.use( express.json() );
 
 // Rutas
-app.use('/api/auth', require('./routes/auth') );
+app.use('/api/signin', require('./routes/auth') );
 app.use('/api/vehiculos', require('./routes/vehiculos') );
 app.use('/api/marcas', require('./routes/marcas') );
 app.use('/api/colores', require('./routes/colores') );
