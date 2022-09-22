@@ -23,6 +23,7 @@ app.use('/api/signin', require('./routes/auth') );
 app.use('/api/vehiculos', require('./routes/vehiculos') );
 app.use('/api/marcas', require('./routes/marcas') );
 app.use('/api/colores', require('./routes/colores') );
+app.use('/api/catalogos', require('./routes/catalogos') );
 
 app.get('*', (req, res) => {
     res.sendFile(__dirname + '/public/index.html');
