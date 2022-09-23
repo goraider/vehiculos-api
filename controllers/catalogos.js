@@ -3,31 +3,35 @@ const bcrypt = require('bcryptjs');
 const Color = require('../models/Marca');
 const Marca = require('../models/Color');
 
-const listaCatalogos = (request, res = response) => {
-
-    let catalogos = [];
-
-    console.log(request.body.params);
+const listaCatalogos = async (request, res = response) => {
 
 
-    request.body.params.forEach(element => {
+    let catalogs = {};
+    let catalogs_list = [
+        {nombre:'marcas', 'model' : await Marca.find()},
+        {nombre:'colores', 'model' : await Color.find()}
+    ];
+    let get_catalogs = catalogs_list.filter( (model) => {
+        return request.body.params.some( (search) => {
+            if( model.nombre === search.nombre ){
 
-    const catalogo = element.nombre.find();
-     console.log(catalogo);
-   });
+                return `${ model.nombre } : ${ model.model }`;
+            }
+            //return model.nombre === search.nombre `${ base } x ${ i } =  ${ base * i }\n`;;
+        });
+
+    });
+
+    let test = JSON.parse(JSON.stringify(get_catalogs));
 
 
+    console.log(catalogs);
 
-
-    // const usuarios = await Usuario.find()
-    //                     .skip(pageSize * (currentPage - 1))
-    //                     .limit(pageSize);
-
-    // const total = await Usuario.countDocuments();
 
     return res.status(200).json({
         succesfull: true,
         msg: 'Lista de Catalogos',
+        data: test
     });
 
 }
