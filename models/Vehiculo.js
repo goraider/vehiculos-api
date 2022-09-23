@@ -8,7 +8,7 @@ const VehiculoSchema =  Schema({
         required: true
     },
     modelo: {
-        type: Number,
+        type: String,
         required: true
     },
     color: {

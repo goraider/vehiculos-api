@@ -13,12 +13,14 @@ const listaVehiculos = async(request, res = response) => {
                                })
                                 .populate('marca')
                                 .populate('color');
+    const total = await Vehiculo.countDocuments();                                
 
     return res.status(200).json({
 
         succesfull: true,
         msg: 'Listado de Vehículo',
-        vehiculos
+        vehiculos,
+        total
 
     });
 
@@ -51,6 +53,46 @@ const crearVehiculo = async(request, res = response) => {
         });
         
     }
+}
+
+const obtenerVehiculo = async(request, res = response) =>{
+
+    const vehiculoId = request.params.id;
+    
+    try {
+
+        let vehiculo = await Vehiculo.findById( vehiculoId )
+        .populate({
+            path:'user',
+            select:'username email'
+       })
+        .populate('marca')
+        .populate('color');
+
+        if( !vehiculo ){
+            return res.status(400).json({
+                succesfull: false,
+                msg: 'El Vehículo no Existe con este ID!',
+            });
+        }
+
+        if( vehiculo ){
+            res.status(200).json({
+                succesfull:true,
+                vehiculo: vehiculo,
+            });
+        }
+
+    } catch (error) {
+        
+        console.log(error);
+
+        res.status(500).json({
+            succesfull: false,
+            msg: 'Por favor hable con el administrador'
+        });
+    }
+
 }
 
 const actualizarVehiculo = async(request, res = response) => {
@@ -154,11 +196,10 @@ const eliminarVehiculo = async(request, res = response) =>{
     }
 }
 
-
-
 module.exports = {
 
     listaVehiculos,
+    obtenerVehiculo,
     crearVehiculo,
     actualizarVehiculo,
     eliminarVehiculo,

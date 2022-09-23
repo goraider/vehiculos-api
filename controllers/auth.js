@@ -26,8 +26,6 @@ const listaUsuarios = async(request, res = response) => {
 
 }
 
-
-
 const createUser = async(request, res = response) =>{
 
 

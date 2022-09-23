@@ -5,15 +5,16 @@ const { isDate } =  require('../helpers/isDate');
 
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
-const { listaVehiculos, crearVehiculo, actualizarVehiculo, eliminarVehiculo } = require('../controllers/vehiculos');
+const { listaVehiculos, obtenerVehiculo, crearVehiculo, actualizarVehiculo, eliminarVehiculo } = require('../controllers/vehiculos');
 
 const router = Router();
 
 //para validar el token en todas las rutas
 router.use( validarJWT );
 
-
 router.get( '/listado-vehiculos', listaVehiculos );
+
+router.put( '/obtener-vehiculo/:id', obtenerVehiculo );
 
 router.post(
     '/crear-vehiculo',
