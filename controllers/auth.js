@@ -18,7 +18,7 @@ const listaUsuarios = async(request, res = response) => {
 
     return res.status(200).json({
         succesfull: true,
-        msg: 'Lista de Usuarios',
+        msg: '¡Usuarios en Línea!',
         usuarios,
         total,
         per_page

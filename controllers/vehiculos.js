@@ -18,7 +18,7 @@ const listaVehiculos = async(request, res = response) => {
     return res.status(200).json({
 
         succesfull: true,
-        msg: 'Listado de Vehículo',
+        msg: '¡Vehículos en Línea!',
         vehiculos,
         total
 
