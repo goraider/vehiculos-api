@@ -1,28 +1,109 @@
 const { response } = require('express');
+const { ObjectId } = require('mongoose').Types;
+const mongoose = require('mongoose');
 const Vehiculo = require('../models/Vehiculo');
 
 
+    //buscar por una letra en especcifico(se pueden omitir o espeficificar valores de regreso)
+    //const records = await Vehiculo.find({modelo:{$regex:/^2/}},{modelo:1,_id:0})
 
-const listaVehiculos = async(request, res = response) => {
 
-    //const { test } = request.body;
-    const vehiculos = await Vehiculo.find()
-                                .populate({
-                                    path:'user',
-                                    select:'username email'
-                               })
-                                .populate('marca')
-                                .populate('color');
-    const total = await Vehiculo.countDocuments();                                
+const listaVehiculos = async(req = request, res = response) => {
 
-    return res.status(200).json({
+    //const { modelo } = req.query;
 
-        succesfull: true,
-        msg: '¡Vehículos en Línea!',
-        vehiculos,
-        total
+    const { marca } = req.query;   
 
-    });
+    const esMarcaID = ObjectId.isValid(marca);
+
+    if( esMarcaID ){
+
+        console.log(esMarcaID);
+        const id = mongoose.Types.ObjectId(marca);
+        const data = await Vehiculo.find({ marca: id });
+        const total = await Vehiculo.countDocuments();  
+        
+        return res.status(200).json({
+            succesfull: true,
+            msg: '¡Filtro Aplicado!',
+            vehiculos: data,
+            total
+            //valida si viene null y si sipues dar un array vacio
+            //vehiculos: ( data ) ? [ data ] : []
+        });
+
+    }
+
+        //     return res.status(200).json({
+    //         succesfull: true,
+    //         msg: '¡Marcar Encontrada!',
+    //         elementos
+    //     });
+
+
+
+    //const marcaID = mongoose.Types.ObjectId(marca);
+
+    //const elementos = Vehiculo.find( marca );
+    //console.log("encontrados", elementos);
+
+    //let varias = Vehiculo.find(marca);
+    //const records = await Vehiculo.find({ 'modelo': { $elemMatch: modelo } });
+
+
+
+    //const records = await Vehiculo.find({modelo:{$regex:modelo}})
+    //const datos = Vehiculo.find({ marca : { $in : marca } })
+
+    // let data = JSON.parse(datos);
+    
+    // console.log(data);
+
+    //     return res.status(200).json({
+    //         succesfull: true,
+    //         msg: 'siiii',
+    //         data
+    //     });
+
+    //let elements = JSON.parse(JSON.stringify(marca_filtro));
+
+    // if( !elementos ) {
+
+    //     return res.status(404).json({
+    //         succesfull: false,
+    //         msg: '¡No hay vehículos registrados con esta Marca!'
+    //     });
+
+    // }else{
+
+    //     return res.status(200).json({
+    //         succesfull: true,
+    //         msg: '¡Marcar Encontrada!',
+    //         elementos
+    //     });
+
+    // }
+
+
+
+    // const { test } = request.body;
+    // const vehiculos = await Vehiculo.find()
+    //                             .populate({
+    //                                 path:'user',
+    //                                 select:'username email'
+    //                            })
+    //                             .populate('marca')
+    //                             .populate('color');
+    // const total = await Vehiculo.countDocuments();                                
+
+    // return res.status(200).json({
+
+    //     succesfull: true,
+    //     msg: '¡Vehículos en Línea!',
+    //     vehiculos,
+    //     total
+
+    // });
 
 }
 
