@@ -75,6 +75,45 @@ const createUser = async(request, res = response) =>{
 
 }
 
+const actualizarUsuario = async(request, res = response) => {
+
+    const usuarioId = request.params.id;
+
+    try {
+
+        const usuario = await Usuario.findById( usuarioId );
+
+        if( !usuario ) {
+            res.status(404).json({
+                succesfull: false,
+                msg: '¡El Usuario no Existe!'
+            });
+        }
+
+        const nuevoUsuario = {
+            ...request.body,
+            password: usuario.password
+        }
+
+        const usuarioActualizado = await Usuario.findByIdAndUpdate( usuarioId, nuevoUsuario, {new: true} );
+
+        res.status(200).json({
+            succesfull: true,
+            usuario: usuarioActualizado
+        });
+        
+    } catch (error) {
+
+        console.log(error);
+        res.status(500).json({
+            succesfull: false,
+            msg: "Hable con el administrador"
+        });
+        
+    }
+
+}
+
 const loginUser = async(request, res = response) =>{
     
     const { email, password } = request.body;
@@ -110,6 +149,7 @@ const loginUser = async(request, res = response) =>{
                 id: usuario.id,
                 username: usuario.username,
                 email: usuario.email,
+                access_token: token
             },
             uid: usuario.id,
             username: usuario.username,
@@ -151,6 +191,7 @@ const revalidateToken = async(request, res = response) =>{
 module.exports = {
     listaUsuarios,
     createUser,
+    actualizarUsuario,
     loginUser,
     revalidateToken
 }

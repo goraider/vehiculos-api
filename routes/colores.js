@@ -4,7 +4,7 @@ const { check } = require('express-validator');
 
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
-const { listadoDeColores, crearColor, actualizarColor, eliminarColor } = require('../controllers/colores');
+const { listadoDeColores, crearColor, obtenerColor, actualizarColor, eliminarColor } = require('../controllers/colores');
 
 const router = Router();
 
@@ -12,6 +12,8 @@ const router = Router();
 router.use( validarJWT );
 
 router.get( '/listado-colores', listadoDeColores );
+
+router.put( '/obtener-color/:id', obtenerColor );
 
 router.post(
     '/crear-color',

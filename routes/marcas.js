@@ -4,15 +4,16 @@ const { check } = require('express-validator');
 
 const { validarCampos } = require('../middlewares/validar-campos');
 const { validarJWT } = require('../middlewares/validar-jwt');
-const { listadoDeMarcas, crearMarca, actualizarMarca, eliminarMarca } = require('../controllers/marcas');
+const { listadoDeMarcas, crearMarca, obtenerMarca, actualizarMarca, eliminarMarca } = require('../controllers/marcas');
 
 const router = Router();
 
 //valida el token en todas las rutas
 router.use( validarJWT );
 
-
 router.get( '/listado-marcas', listadoDeMarcas );
+
+router.put( '/obtener-marca/:id', obtenerMarca );
 
 router.post(
     '/crear-marca',

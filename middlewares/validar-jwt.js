@@ -13,29 +13,24 @@ const validarJWT = ( req, res =  response, next ) => {
         });
     }
 
-        try {
-            //const payload = jwt.verify
-            const { uid, name } = jwt.verify(
-                token,
-                process.env.SECRET_JWT_SEED
-            );
+    try {
+        //const payload = jwt.verify
+        const { uid, name } = jwt.verify(
+            token,
+            process.env.SECRET_JWT_SEED
+        );
+        req.uid = uid;
+        req.name = name;
 
-            req.uid = uid;
-            req.name = name;
+    } catch (error) {
 
-            
-            
-        } catch (error) {
-
-            return res.status(401).json({
-                succesfull:false,
-                msg: 'Token no valido'
-            });
-            
-        }
-
-    console.log(token);
-
+        return res.status(401).json({
+            succesfull:false,
+            msg: 'Token no valido'
+        });
+        
+    }
+    //console.log(token);
     next();
 
 }

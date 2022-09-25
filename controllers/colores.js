@@ -1,25 +1,41 @@
 const { response } = require('express');
 const Color  = require('../models/Color');
 
-const listadoDeColores = async(request, res = response) => {
+const listadoDeColores = async(req = reques, res = response) => {
 
-    const pageSize = 10;
-    const currentPage = 1;
-    const per_page = 20;
+    const { query } = req.query;
 
-    const colores = await Color.find()
-                        .skip(pageSize * (currentPage - 1))
-                        .limit(pageSize);
+    if( query ){
+        const regex = new RegExp( query, 'i' );
+        const colores = await Color.find({ nombre: regex });
+        const total = await Color.countDocuments();
 
-    const total = await Color.countDocuments();
+        return res.status(200).json({
+            succesfull: true,
+            msg: 'Listado de las Colores',
+            colores,
+            total
+        });
 
-    return res.status(200).json({
-        succesfull: true,
-        msg: 'Listado de Colores',
-        colores,
-        total,
-        per_page
-    });
+        
+    }else{
+
+        const pageSize = 10;
+        const currentPage = 1;
+
+        const colores = await Color.find()
+                            .skip(pageSize * (currentPage - 1))
+                            .limit(pageSize);
+
+        const total = await Color.countDocuments();
+
+        return res.status(200).json({
+            succesfull: true,
+            msg: 'Listado de Colores',
+            colores,
+            total,
+        });
+    }
 
 }
 
@@ -49,6 +65,40 @@ const crearColor = async(request, res = response) => {
     }
 
 
+
+}
+
+const obtenerColor = async(request, res = response) =>{
+
+    const colorId = request.params.id;
+    
+    try {
+
+        let color = await Color.findById( colorId );
+
+        if( !color ){
+            return res.status(400).json({
+                succesfull: false,
+                msg: 'El Color no Existe con este ID!',
+            });
+        }
+
+        if( color ){
+            res.status(200).json({
+                succesfull:true,
+                color: color,
+            });
+        }
+
+    } catch (error) {
+        
+        console.log(error);
+
+        res.status(500).json({
+            succesfull: false,
+            msg: 'Por favor hable con el administrador'
+        });
+    }
 
 }
 
@@ -130,6 +180,7 @@ const eliminarColor = async(request, res = response) =>{
 module.exports = {
     listadoDeColores,
     crearColor,
+    obtenerColor,
     actualizarColor,
     eliminarColor
 };

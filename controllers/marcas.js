@@ -3,25 +3,42 @@ const Marca  = require('../models/Marca');
 
 
 
-const listadoDeMarcas = async(request, res = response) => {
+const listadoDeMarcas = async(req = request, res = response) => {
+    
+    const { query } = req.query;
 
-    const pageSize = 10;
-    const currentPage = 1;
-    const per_page = 20;
+    if( query ){
+        const regex = new RegExp( query, 'i' );
+        const marcas = await Marca.find({ nombre: regex });
+        const total = await Marca.countDocuments();
 
-    const marcas = await Marca.find()
-                        .skip(pageSize * (currentPage - 1))
-                        .limit(pageSize);
+        return res.status(200).json({
+            succesfull: true,
+            msg: 'Listado de las Marcas',
+            marcas,
+            total
+        });
 
-    const total = await Marca.countDocuments();
+        
+    }else{
+        
+        const pageSize = 10;
+        const currentPage = 1;
+    
+        const marcas = await Marca.find()
+                            .skip(pageSize * (currentPage - 1))
+                            .limit(pageSize);
+    
+        const total = await Marca.countDocuments();
+    
+        return res.status(200).json({
+            succesfull: true,
+            msg: 'Listado de las Marcas',
+            marcas,
+            total,
+        });
 
-    return res.status(200).json({
-        succesfull: true,
-        msg: 'Listado de las Marcas',
-        marcas,
-        total,
-        per_page
-    });
+    }
 
 }
 
@@ -51,6 +68,40 @@ const crearMarca = async(request, res = response) => {
     }
 
 
+
+}
+
+const obtenerMarca = async(request, res = response) =>{
+
+    const marcaId = request.params.id;
+    
+    try {
+
+        let marca = await Marca.findById( marcaId );
+
+        if( !marca ){
+            return res.status(400).json({
+                succesfull: false,
+                msg: 'La Marca no Existe con este ID!',
+            });
+        }
+
+        if( marca ){
+            res.status(200).json({
+                succesfull:true,
+                marca: marca,
+            });
+        }
+
+    } catch (error) {
+        
+        console.log(error);
+
+        res.status(500).json({
+            succesfull: false,
+            msg: 'Por favor hable con el administrador'
+        });
+    }
 
 }
 
@@ -134,6 +185,7 @@ const eliminarMarca = async(request, res = response) =>{
 module.exports = {
     listadoDeMarcas,
     crearMarca,
+    obtenerMarca,
     actualizarMarca,
     eliminarMarca
 };
