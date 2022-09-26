@@ -25,3 +25,6 @@ Se Utilizaron las siguientes tecnologías:
 npm install
 npm run dev
 
+Dar Click al enlace y abrirá el proyecto en su navegador de manera local:
+[URL]( http://localhost:4001/#/login) – LocalHost
+
