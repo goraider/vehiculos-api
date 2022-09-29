@@ -320,7 +320,7 @@ const eliminarVehiculo = async(request, res = response) =>{
 
         if( vehiculo.user.toString() !== uid ){
 
-            return res.status(403).json({
+            return res.json({
                 succesfull: false,
                 msg: 'No tiene privilegios de Eliminar este Vehículo'
             });
